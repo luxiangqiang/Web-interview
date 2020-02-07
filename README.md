@@ -60,7 +60,9 @@
     - [发展前景](#3、发展前景)
 
 - [JavaScript 基础知识点](#JavaScript基础知识点)
+    
     - [数据类型](#数据类型)
+        
         - [1、数据类型的存储形式](#1、数据类型的存储形式) 
         - [2、Null](#2、Null) 
         - [3、数据类型的判断](#3、数据类型的判断) 
@@ -591,7 +593,7 @@
 
 ​	
 
-![堆和栈内存](H:\编程笔记\前端面试整理\images\堆和栈内存.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/%E5%A0%86%E5%92%8C%E6%A0%88%E5%86%85%E5%AD%98.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/数据类型/堆和栈内存.png)
 
 原始类型是按值形式存放在**栈**中的数据段，内存空间可以自由分配，同时可以**按值直接访问**。
 
@@ -606,7 +608,7 @@ console.log(b); // 30值
 
 过程图示：
 
-![栈变量复制](H:\编程笔记\前端面试整理\images\栈变量复制.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/%E6%A0%88%E5%8F%98%E9%87%8F%E5%A4%8D%E5%88%B6.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/数据类型/栈变量复制.png)
 
 引用类型是存放在**堆**内存中，每个对象在堆内存中有一个引用地址，就像是每个房间都有一个房间号一样。引用类型在栈中保存的就是这个对象在堆内存的引用地址，我们所说的“房间号”。通过“房间号”可以快速查找到保存在堆内存的对象。
 
@@ -619,7 +621,7 @@ console.log(obj1.name); // 小鹿
 
 过程图示：
 
-![对象复制](H:\编程笔记\前端面试整理\images\对象复制.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/%E5%AF%B9%E8%B1%A1%E5%A4%8D%E5%88%B6.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/数据类型/对象复制.png)
 
 
 
@@ -1180,7 +1182,7 @@ function fn2() {
 
 声明两个函数，分别创建量两个私有的作用域（可以理解为两个封闭容器），<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 是不能直接访问私有作用域 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn1</code> 的变量 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a</code> 的。同样的，在 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn1</code> 中不能访问到 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 中的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">b</code> 变量的。一个函数就是一个作用域。
 
-![私有作用域](H:\编程笔记\前端面试整理\images\闭包\私有作用域.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E9%97%AD%E5%8C%85/%E7%A7%81%E6%9C%89%E4%BD%9C%E7%94%A8%E5%9F%9F.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/闭包/私有作用域.png)
 
 每个函数都会有一个作用域，查找变量或函数时，由局部作用域到全局作用域依次查找，<span style="color:#ff502c;font-weight:bold;padding:0 2px">这些作用域的集合就称为作用域链。</span> 如果还不是很好理解，俺再举个例子​：:chestnut:
 
@@ -1204,7 +1206,7 @@ fn();
 
 虽然上边看起来嵌套有点复杂，我们前边说过，一个函数就是一个私有作用域，根据定义，在 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 作用域中打印 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a</code>，首先在自己所在作用域搜索，如果没有就向上级作用域搜索，直到搜索到全局作用域，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a = 1</code>，找到了打印出值。整个搜索的过程，就是基于作用域链搜索的。
 
-![作用域链](H:\编程笔记\前端面试整理\images\闭包\作用域链.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E9%97%AD%E5%8C%85/%E4%BD%9C%E7%94%A8%E5%9F%9F%E9%93%BE.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/闭包/作用域链.png)
 
 
 
@@ -1262,11 +1264,11 @@ for(var i = 0; i < 1en; i++){
 
 **原型：**每个 `JS` 对象都有 `__proto__` 属性，这个属性指向了原型。跟俺去看看，
 
-![原型1](H:\编程笔记\前端面试整理\images\原型\原型1.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E5%8E%9F%E5%9E%8B/%E5%8E%9F%E5%9E%8B1.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/原型/原型1.png)
 
 再来一个，
 
-![原型2](H:\编程笔记\前端面试整理\images\原型\原型2.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E5%8E%9F%E5%9E%8B/%E5%8E%9F%E5%9E%8B2.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/原型/原型2.png)
 
 我们可以看到，只要是对象类型，都会有这个`__proto__` 属性，这个属性指向的也是一个原型对象，原型对象也是对象呀，肯定也会存在一个 `__proto__` 属性。那么就形成了原型链，定义如下：
 
@@ -1284,7 +1286,7 @@ for(var i = 0; i < 1en; i++){
 
 再往深处看，他们之间存在复杂的关系，但是这些所谓的负责关系俺已经总结好了，小二上菜
 
-![原型图](H:\编程笔记\前端面试整理\images\原型\原型图.png)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E5%8E%9F%E5%9E%8B/%E5%8E%9F%E5%9E%8B%E5%9B%BE.png](https://github.com/luxiangqiang/Web-interview/blob/master/images/原型/原型图.png)
 
 这张图看起来真复杂，但是通过下边总结的，再来分析这张图，试试看。
 
@@ -1310,7 +1312,7 @@ var f1 = new Foo();
 console.log(f1 instanceof Foo);// true
 ```
 
-![instanceof](H:\编程笔记\前端面试整理\images\原型\instanceof.jpg)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E5%8E%9F%E5%9E%8B/instanceof.jpg](https://github.com/luxiangqiang/Web-interview/blob/master/images/原型/instanceof.jpg)
 
 ### 继承
 
@@ -1816,7 +1818,7 @@ foo();
 - `bar` 函数执行完出栈，继续执行执行栈顶端的函数 `foo`，最后输出 `c`。
 - `foo` 出栈，所有执行栈内任务执行完毕。
 
-![执行栈](H:\编程笔记\前端面试整理\images\原型\执行栈.gif)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E5%8E%9F%E5%9E%8B/%E6%89%A7%E8%A1%8C%E6%A0%88.gif](https://github.com/luxiangqiang/Web-interview/blob/master/images/原型/执行栈.gif)
 
 
 
@@ -1907,7 +1909,7 @@ foo();
 - 在宏任务队列中取出一个宏任务，也就是之前的 `setTimeout`，最后输出 2。
 - 此时任务队列为空，执行栈中为空，整个程序执行完毕。
 
-![消息循环](H:\编程笔记\前端面试整理\images\消息循环\消息循环.gif)
+![https://github.com/luxiangqiang/Web-interview/blob/master/images/%E6%B6%88%E6%81%AF%E5%BE%AA%E7%8E%AF/%E6%B6%88%E6%81%AF%E5%BE%AA%E7%8E%AF.gif](https://github.com/luxiangqiang/Web-interview/blob/master/images/消息循环/消息循环.gif)
 
 
 
