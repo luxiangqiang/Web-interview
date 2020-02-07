@@ -12,6 +12,14 @@
 - **2020/1/11**  开始写准备简历部分。
 - **2020/1/13**  完善面试前的准备内容。
 - **2020/1/14**  对面试准备内容做一次整体的优化。
+- **2020/1/15**  开始写 JavaScript 基础知识部分 。
+- **2020/1/16**  写数据类型中的七大模块部分 。
+- **2020/1/17**  写 this、闭包等重点部分。
+- **2020/1/30**   写消息循环机制的原理
+- **2020/02/02**  补充 new 的实现原理
+- **2020/02/03**  补充继承等知识内容，以及一些参考文献
+- **2020/02/04**  补充垃圾回收机制等知识内容
+- **2020/02/05**  补充深浅拷贝等知识内容
 - **会持续更新中...**
 
 ****
@@ -51,7 +59,38 @@
     - [主要业务产品](#2、主要业务产品)
     - [发展前景](#3、发展前景)
 
-
+- [JavaScript 基础知识点](#JavaScript基础知识点)
+    - [数据类型](#数据类型)
+        - [1、数据类型的存储形式](#1、数据类型的存储形式) 
+        - [2、Null](#2、Null) 
+        - [3、数据类型的判断](#3、数据类型的判断) 
+        - [4、类型转换](#4、类型转换) 
+        - [5、四则运算](#5、四则运算) 
+        - [6、逻辑运算符](#6、逻辑运算符) 
+        - [7、比较运算符](#7、比较运算符) 
+    - [this](#this)
+    - [new](#new)
+    - [闭包](#闭包)
+    - [原型和原型链](#原型和原型链)
+    - [继承](#继承)
+      - [经典继承](#经典继承)  
+      - [组合继承](#组合继承)  
+      - [原型继承](#原型继承)  
+      - [寄生式继承](#寄生式继承)  
+    - [垃圾回收机制](#垃圾回收机制)
+      - [两种垃圾回收策略](#两种垃圾回收策略) 
+      - [标记清除法](#标记清除法) 
+      - [引用计数法](#引用计数法) 
+      - [如何管理内存](#如何管理内存) 
+    - [深拷贝和浅拷贝](#深拷贝和浅拷贝)
+    - [异步编程](#异步编程)
+        - [执行上下文](#执行上下文) 
+        - [执行栈](#执行栈) 
+        - [宏任务](#宏任务) 
+        - [微任务](#微任务) 
+        - [运行机制](#运行机制) 
+        
+        
 
 ## 本系列介绍
 
@@ -512,6 +551,1372 @@
 > 再一个就是了解该公司的发展前景，和你个人的爱好以及个人价值是否一致呢。
 
 互联网公司覆盖的领域很广，医疗领域、教育领域、娱乐领域、游戏领域等等。俺把其公司作为两种分类，一类是产品公司，这一类主要是针对特定的用户进行开发产品的，比如某公司主要对于医院来开发医疗系统。另一类呢是互联网公司。主要是面向大众化的产品，比如抖音、今日头条、微信等。当然，不同类型的公司对应的开发也是不一样的，俺就不在这展开说了。
+
+
+
+## JavaScript 基础知识点
+
+### 数据类型
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 JavaScript 中的基本类型有哪些？以及各个数据类型是如何存储的？</p>
+</blockquote>
+
+<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">javaScript</code> 的数据类型包括<span style="color:#ff502c;font-weight:bold;padding:0 2px">原始类型</span>和<span style="color:#ff502c;font-weight:bold;padding:0 2px">引用类型(对象类型)</span>。
+
+原始类型包括以下 6 个：
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">String</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Number</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Boolean</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">null</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">undefined</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Symbol</code>
+
+
+
+引用类型统称为 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object</code> 类型，如果细分的话，分为以下 5 个：
+
+- `Object`
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Array</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Date</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">RegExp</code>
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Function</code>
+
+
+
+#### 1、数据类型的存储形式
+
+> 栈（Stack）和堆（Heap），是两种基本的数据结构。Stack 在内存中自动分配内存空间的；Heap 在内存中动态分配内存空间的，不一定会自动释放。一般我们在项目中将对象类型手动置为 null 原因，减少无用内存消耗。
+
+​	
+
+![堆和栈内存](H:\编程笔记\前端面试整理\images\堆和栈内存.png)
+
+原始类型是按值形式存放在**栈**中的数据段，内存空间可以自由分配，同时可以**按值直接访问**。
+
+```javascript
+var a = 10;
+var b = a;
+b = 30;
+console.log(a); // 10值
+console.log(b); // 30值
+
+```
+
+过程图示：
+
+![栈变量复制](H:\编程笔记\前端面试整理\images\栈变量复制.png)
+
+引用类型是存放在**堆**内存中，每个对象在堆内存中有一个引用地址，就像是每个房间都有一个房间号一样。引用类型在栈中保存的就是这个对象在堆内存的引用地址，我们所说的“房间号”。通过“房间号”可以快速查找到保存在堆内存的对象。
+
+```javascript
+var obj1 = new Object();
+var obj2 = obj1;
+obj2.name = "小鹿";
+console.log(obj1.name); // 小鹿
+```
+
+过程图示：
+
+![对象复制](H:\编程笔记\前端面试整理\images\对象复制.png)
+
+
+
+#### 2、Null
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：为什么 typeof null 等于 Object?</p>
+</blockquote>
+
+不同的对象在底层原理的存储是用二进制表示的，在 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">javaScript</code>中，如果二进制的前三位都为 0 的话，系统会判定为是 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object</code>类型。<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">null</code>的存储二进制是 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">000</code>，也是前三位，所以系统判定 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">null</code>为 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object</code>类型。
+
+**扩展：**
+
+这个 bug 个第一版的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">javaScript</code>留下来的。俺也进行扩展一下其他的几个类型标志位：
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">000</code>：对象类型。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">1</code>：整型，数据是31位带符号整数。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">010</code>：双精度类型，数据是双精度数字。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">100</code>：字符串，数据是字符串。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">110</code>：布尔类型，数据是布尔值。
+
+
+
+#### 3、数据类型的判断
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：typeof 与 instanceof 有什么区别？</p>
+</blockquote>
+
+<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">typeof</code> 是一元运算符，同样返回一个字符串类型。一般用来判断一个变量是否为空或者是什么类型。
+
+除了 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">null</code> 类型以及  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object</code> 类型不能准确判断外，其他数据类型都可能返回正确的类型。
+
+```javascript
+typeof undefined // 'undefined'
+typeof '10'      // 'String'
+typeof 10        // 'Number'
+typeof false     // 'Boolean'
+typeof Symbol()  // 'Symbol'
+typeof Function  // ‘function'
+typeof null		 // ‘Object’
+typeof []        // 'Object'
+typeof {}        // 'Object'
+```
+
+既然 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">typeof</code> 对对象类型都返回 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object</code> 类型情况的局限性，我们可以使用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">instanceof</code> 来进行判断**某个对象是不是另一个对象的实例**。返回值的是一个布尔类型。
+
+```javascript
+var a = [];
+console.log(a instanceof Array) // true
+```
+
+<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">instanceof</code>  运算符用来测试一个对象在其原型链中是否存在一个构造函数的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">prototype</code> 属性，如果对原型链不怎能了解，后边俺会具体的写到，这里大体记一下就 OK。
+
+我们再测一下 ES6 中的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">class</code> 语法糖是什么类型。
+
+```javascript
+class A{}
+console.log(A instanceof Function) // true
+```
+
+> 注意：原型链中的<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">prototype</code> 随时可以被改动的，改变后的值可能不存在于 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">object</code>的原型链上，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">instanceof</code>返回的值可能就返回 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">false</code>。
+
+
+
+#### 4、类型转换
+
+类型转换通常在面试笔试中出现的比较多，对于类型转换的一些细节应聘者也是很容易忽略的，所以俺整理的尽量系统一些。<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">javaScript</code>是一种弱类型语言，变量不受类型限制，所以在特定情况下我们需要对类型进行转换。
+
+「类型转换」分为<span style="color:#ff502c;font-weight:bold;padding:0 2px">显式类型转换</span>和<span style="color:#ff502c;font-weight:bold;padding:0 2px">隐式类型转换</span>。每种转换又分为<span style="color:#ff502c;font-weight:bold;padding:0 2px">原始类型转换</span>和<span style="color:#ff502c;font-weight:bold;padding:0 2px">对象类型转换</span>。
+
+
+
+##### 显式类型转换
+
+显式类型转换就是我们所说强制类型转换。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>笔试题：其他数据类型转字符串类型！</p>
+</blockquote>
+
+对于原始类型来说，转字符串类型会默认调用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">toString()</code> 方法。
+
+| 数据类型  | String类型               |
+| :-------- | :----------------------- |
+| 数字      | 转化为数字对应的字符串   |
+| true      | 转化为字符串 "true"      |
+| null      | 转化为字符串 "null"      |
+| undefined | 转化为字符串 “undefined” |
+| Object    | 转化为 "[object Object]" |
+
+```javascript
+String(123);      // "123"
+String(true);     // "true"
+String(null);     // "null"
+String(undefined);// "undefined"
+String([1,2,3])   // "1,2,3"
+String({});		  // "[object Object]"
+```
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>笔试题：其他数据类型转布尔类型！</p>
+</blockquote>
+
+除了特殊的几个值 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">‘’</code>、 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">undefined</code>、 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">NAN</code>、 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">null</code>、 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">false</code>、 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">0</code>  转化为 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Boolean</code> 为 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">false</code> 之外，其他类型值都转化为 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">true</code>。
+
+```javascript
+Boolean('')         // false
+Boolean(undefined)  // false
+Boolean(null)       // false
+Boolean(NaN)        // false
+Boolean(false)      // false
+Boolean(0)          // false
+Boolean({})		    // true
+Boolean([])		    // true
+```
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+        <p>笔试题：转化为数字类型！</p>
+</blockquote>
+
+| 数据类型  | 数字类型                                                     |
+| :-------- | :----------------------------------------------------------- |
+| 字符串    | 1) 数字转化为对应的数字<br />2) 其他转化为 NaN               |
+| 布尔类型  | 1) true 转化为 1<br />2) false 转化为 0                      |
+| null      | 0                                                            |
+| undefined | NaN                                                          |
+| 数组      | 1) 数组为空转化为 0；<br />2) 数组只有一个元素转化为对应元素；<br />3) 其他转化为NaN |
+| 空字符串  | 0                                                            |
+
+```javascript
+Number(10);        // 10 
+Number('10');      // 10 
+Number(null);      // 0  
+Number('');        // 0  
+Number(true);      // 1  
+Number(false);     // 0  
+Number([]);        // 0 
+Number([1,2]);     // NaN
+Number('10a');     // NaN
+Number(undefined); // NaN
+```
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>笔试题：对象类型转原始类型！</p>
+</blockquote>
+
+对象类型在转原始类型的时候，会调用内置的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">valueOf()</code>和 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">toString()</code> 方法，这两个方法是可以进行重写的。
+
+转化原始类型分为两种情况：转化为<span style="color:#ff502c;font-weight:bold;padding:0 2px">字符串类型</span>或<span style="color:#ff502c;font-weight:bold;padding:0 2px">其他原始类型</span>。
+
+- 如果已经是原始类型，不需要再进行转化。
+- 如果转字符串类型，就调用内置函数中的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">toString()</code>方法。
+- 如果是其他基本类型，则调用内置函数中的  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">valueOf()</code>方法。
+- 如果返回的不是原始类型，则会继续调用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">toString()</code> 方法。
+- 如果还没有返回原始类型，则报错。
+
+
+
+#### 5、四则运算
+
+隐士类型转化是不需要认为的强制类型转化，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">javaScript</code> 自动将类型转化为需要的类型，所以称之为隐式类型转换。
+
+
+
+##### 加法运算
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>加法运算符是在运行时决定，到底是执行相加，还是执行连接。运算数的不同，导致了不同的语法行为，这种现象称为“重载”。</p>
+</blockquote>
+
+- 如果双方都不是字符串，则将转化为**数字**或**字符串**。
+  - <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Boolean + Boolean</code>会转化为数字相加。
+  - <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Boolean + Number</code> 布尔类型转化为数字相加。
+  - <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Object + Number</code> 对象类型调用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">valueOf</code>，如果不是 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">String、Boolean</code>或者 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Number</code>类型，则继续调用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">toString()</code>转化为字符串。
+
+```javascript
+true + true  // 2
+1 + true     // 2
+[1] + 3      // '13'
+```
+
+- 字符串和字符串以及字符串和非字符串相加都会进行**连接**。
+
+```javascript
+1 + 'b'     // ‘1b’
+false + 'b' // ‘falseb’
+```
+
+
+
+##### 其他运算
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>其他算术运算符（比如减法、除法和乘法）都不会发生重载。它们的规则是：所有运算子一律转为数值，再进行相应的数学运算。</p>
+</blockquote>
+
+```javascript
+1 * '2'  // 2
+1 * []   // 0
+```
+
+
+
+#### 6、逻辑运算符
+
+逻辑运算符包括两种情况，分别为<span style="color:#ff502c;font-weight:bold;padding:0 2px">条件判断</span>和<span style="color:#ff502c;font-weight:bold;padding:0 2px">赋值操作</span>。
+
+**条件判断**
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">&&</code> ：所有条件为真，整体才为真。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">||</code> ：只有一个条件为真，整体就为真。
+
+```javascript
+true && true   // true
+true && false  // false
+true || true   // true
+true || false  // true
+```
+
+
+
+**赋值操作**
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A && B</code>
+
+首先看 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code> 的真假， <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code> 为假，返回  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code> 的值， <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code>  为真返回  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">B</code>  的值。（不管 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">B</code> 是啥）
+
+```javascript
+console.log(0 && 1) // 0
+console.log(1 && 2) // 2
+```
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A || B</code>
+
+首先看  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code>  的真假， <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code> 为真返回的是  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code>  的值， <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">A</code>  为假返回的是  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">B</code>  的值（不管 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">B</code>  是啥）
+
+```javascript
+console.log(0 || 1) // 1
+console.log(1 || 2) // 1
+```
+
+
+
+#### 7、比较运算符
+
+比较运算符在逻辑语句中使用，以判定变量或值是否相等。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：== 和 === 的区别？</p>
+</blockquote>
+
+对于 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">===</code> 来说，是严格意义上的相等，会比较两个操作符的类型和值。
+
+- 如果 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">X</code> 和  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Y</code> 的类型不同，返回  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">false</code> ；
+- 如果 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">X</code> 和  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Y</code> 的类型相同，则根据下方表格进一步判断
+
+| 条件                                                         | 例子                                                         | 返回值                               |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------ |
+| undefined === undefined                                      | undefined === undefined                                      | true                                 |
+| null === null                                                | null === null                                                | true                                 |
+| String === String<br />(当字符串顺序和字符完全相等的时候返回 true，否则返回 false) | ‘a’ === 'a'<br />'a' === 'aa'                                | true<br />false                      |
+| Boolean  === Boolean                                         | true === true<br />true === false                            | true<br />false                      |
+| Symbol === Symbol                                            | 相同的 Symbol 返回 true，<br />不相同的 Symbol 返回 false    |                                      |
+| Number  === Number<br />① 其中一个为 NaN，返回 false<br />② X 和 Y 值相等，返回 true<br />③ 0 和 -0，返回 true<br />④ 其他返回 false | NaN ==== NaN<br />NaN === 1<br />3 === 3<br />+0 === -0<br /> | false<br />false<br />true<br />true |
+
+
+
+而对于 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">==</code>来说，是非严格意义上的相等，先判断两个操作符的类型是否相等，如果类型不同，则先进行类型转换，然后再判断值是否相等。
+
+- 如果 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">X</code> 和  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Y</code> 的类型相同，返回  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">X == Y</code>  的比较结果；
+- 如果  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">X</code> 和 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">Y</code> 的类型不同，根据下方表格进一步判断;
+
+| 条件                                                         | 例子                     | 返回值         |
+| ------------------------------------------------------------ | ------------------------ | -------------- |
+| null == undefined                                            | null == undefined        | true           |
+| String == Number，String  转 Number                          | '2' == 2                 | true           |
+| Boolean == Number，Boolean 转 Number                         | true == 1                | true           |
+| Object == String,Number,Symbol，将 Object 转化为原始类型再比较值大小 | [1] == 1<br />[1] == '1' | true<br />true |
+| 其他返回 false                                               |                          | false          |
+
+
+
+### this
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是 this 指针?以及各种情况下的 this 指向问题。</p>
+</blockquote>
+
+<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>就是一个对象。不同情况下 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>指向的不同，有以下几种情况，（希望各位亲自测试一下，这样会更容易弄懂）：
+
+- 对象调用，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code> 指向该对象（前边谁调用 this 就指向谁）。
+
+```javascript
+var obj = {
+    name:'小鹿',
+    age: '21',
+    print: function(){
+        console.log(this)
+        console.log(this.name + ':' + this.age)
+    }
+}
+
+// 通过对象的方式调用函数
+obj.print();        // this 指向 obj
+```
+
+
+
+- 直接调用的函数，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>指向的是全局 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">window</code>对象。
+
+```javascript
+function print(){
+	console.log(this);
+}
+
+// 全局调用函数
+print();   // this 指向 window
+```
+
+
+
+- 通过 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">new</code>的方式，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>永远指向新创建的对象。
+
+```javascript
+function Person(name, age){
+    this.name = name;
+    this.age = age;
+    console.log(this);
+}
+
+var xiaolu = new Person('小鹿',22);  // this = > xaiolu
+```
+
+
+
+- 箭头函数中的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>。
+
+由于箭头函数没有单独的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>值。箭头函数的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>与声明所在的上下文相同。也就是说调用箭头函数的时候，不会隐士的调用 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>参数，而是从定义时的函数继承上下文。
+
+```javascript
+const obj = {
+    a:()=>{
+        console.log(this);
+    }
+}
+// 对象调用箭头函数
+obj.a(); // window
+```
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：如何改变 this 的指向？</p>
+</blockquote>
+
+我们可以通过调用函数的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">call、apply、bind</code> 来改变 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>的指向。
+
+```javascript
+var obj = {
+    name:'小鹿',
+    age:'22',
+    adress:'小鹿动画学编程'
+}
+
+function print(){
+    console.log(this);       // 打印 this 的指向
+    console.log(arguments);  // 打印传递的参数
+}
+
+// 通过 call 改变 this 指向
+print.call(obj,1,2,3);   
+
+// 通过 apply 改变 this 指向
+print.apply(obj,[1,2,3]);
+
+// 通过 bind 改变 this 的指向
+let fn = print.bind(obj,1,2,3);
+fn();
+```
+
+对于基本的使用想必各位小伙伴都能掌握，俺就不多废话，再说一说这三者的共同点和不同点。
+
+
+
+**共同点：**
+
+- 三者都能改变 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>指向，且第一个传递的参数都是 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>指向的对象。
+- 三者都采用的后续传参的形式。
+
+
+
+**不同点：**
+
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">call</code> 的传参是单个传递的（试了下数组，也是可以的），而 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">apply</code> 后续传递的参数是**数组形式（传单个值会报错）**，而 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">bind</code> 没有规定，传递值和数组都可以。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">call</code> 和 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">apply</code> 函数的执行是直接执行的，而 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">bind</code> 函数会返回一个函数，然后我们想要调用的时候才会执行。
+
+
+
+> 扩展：如果我们使用上边的方法改变箭头函数的 this 指针，会发生什么情况呢？能否进行改变呢？
+
+由于箭头函数没有自己的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code> 指针，通过 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">call()</code> 或 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">apply()</code> 方法调用一个函数时，只能传递参数（不能绑定  <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">this</code>），他们的第一个参数会被忽略。
+
+
+
+### new
+
+对于 `new` 关键字，我们第一想到的就是在面向对象中 `new` 一个实例对象，但是在 JS 中的 `new` 和 `Java` 中的 `new ` 的机制不一样。
+
+一般 `Java` 中，声明一个`构造函数`，通过 `new 类名()` 来创建一个实例，而这个`构造函数` 是一种特殊的函数。但是在 `JS` 中，只要 `new` 一个函数，就可以 new 一个对象，函数和构造函数没有任何的区别。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：new 内部发生了什么过程？可不可以手写实现一个 new 操作符？</p>
+</blockquote>
+
+`new` 的过程包括以下四个阶段：
+
+- 创建一个新对象。
+- 这个新对象的 `__proto__` 属性指向原函数的 `prototype` 属性。(即继承原函数的原型)
+- 将这个新对象绑定到 此函数的 `this` 上 。
+- 返回新对象，如果这个函数没有返回其他对象。
+
+```javascript
+// new 生成对象的过程
+// 1、生成新对象
+// 2、链接到原型
+// 3、绑定 this
+// 4、返回新对象
+// 参数：
+// 1、Con: 接收一个构造函数
+// 2、args：传入构造函数的参数
+function create(Con, ...args){
+    // 创建空对象
+    let obj = {};
+    // 设置空对象的原型(链接对象的原型)
+    obj._proto_ = Con.prototype;
+    // 绑定 this 并执行构造函数(为对象设置属性)
+    let result = Con.apply(obj,args)
+    // 如果 result 没有其他选择的对象，就返回 obj 对象
+    return result instanceof Object ?  result : obj;
+}
+// 构造函数
+function Test(name, age) {
+    this.name = name
+    this.age = age
+}
+Test.prototype.sayName = function () {
+    console.log(this.name)
+}
+
+// 实现一个 new 操作符
+const a = create(Test,'小鹿','23')
+console.log(a.age)
+```
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：有几种创建对象的方式，字面量相对于 new 创建对象有哪些优势？</p>
+</blockquote>
+
+最常用的创建对象的两种方式：
+
+- **new 构造函数  **
+- **字面量**
+
+其他创建对象的方式：
+
+- **Object.create()**
+
+
+
+字面量创建对象的优势所在：
+
+- 代码量更少，更易读
+- 对象字面量运行速度更快，它们可以在解析的时候被优化。他不会像 `new` 一个对象一样，解析器需要顺着作用域链从当前作用域开始查找，如果在当前作用域找到了名为 `Object()` 的函数就执行，如果没找到，就继续顺着作用域链往上照，直到找到全局 `Object()` 构造函数为止。
+- `Object()` 构造函数可以接收参数，通过这个参数可以把对象实例的创建过程委托给另一个内置构造函数，并返回另外一个对象实例，而这往往不是你想要的。
+
+
+
+对于 `Object.create() `方式创建对象：
+
+```javascript
+Object.create(proto, [propertiesObject]);
+```
+
+- `proto：`新创建对象的原型对象。
+- `propertiesObject：`（可选）可为创建的新对象设置属性和值。
+
+一般用于继承：
+
+```javascript
+var People = function (name){
+  this.name = name;
+};
+
+People.prototype.sayName = function (){
+  console.log(this.name);
+}
+
+function Person(name, age){
+  this.age = age;
+  People.call(this, name);  // 使用call，实现了People属性的继承
+};
+
+// 使用Object.create()方法，实现People原型方法的继承，并且修改了constructor指向
+Person.prototype = Object.create(People.prototype, {
+  constructor: {
+    configurable: true,
+    enumerable: true,
+    value: Person,
+    writable: true
+  }
+});
+
+Person.prototype.sayAge = function (){
+  console.log(this.age);
+}
+
+var p1 = new Person('person1', 25);
+ 
+p1.sayName();  //'person1'
+p1.sayAge();   //25
+```
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：new/字面量 与 Object.create(null) 创建对象的区别？</p>
+</blockquote>
+
+- `new ` 和 字面量创建的对象的原型指向 `Object.prototype`，会继承 `Object` 的属性和方法。
+- 而通过 `Object.create(null)` 创建的对象，其原型指向 `null`，`null` 作为原型链的顶端，没有也不会继承任何属性和方法。
+
+
+
+### 闭包
+
+闭包面试中的重点，但是对于很多初学者来说都是懵懵的，所以俺就从最基础的作用域讲起，大佬请绕过。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是作用域？什么是作用域链？</p>
+</blockquote>
+
+规定<span style="color:#ff502c;font-weight:bold;padding:0 2px">变量和函数</span>的可使用范围叫做作用域。只看定义，挺抽象的，举个例子::chestnut:
+
+```javascript
+function fn1() {
+    let a = 1;
+}
+
+function fn2() {
+    let b = 2;
+}
+```
+
+声明两个函数，分别创建量两个私有的作用域（可以理解为两个封闭容器），<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 是不能直接访问私有作用域 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn1</code> 的变量 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a</code> 的。同样的，在 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn1</code> 中不能访问到 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 中的 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">b</code> 变量的。一个函数就是一个作用域。
+
+![私有作用域](H:\编程笔记\前端面试整理\images\闭包\私有作用域.png)
+
+每个函数都会有一个作用域，查找变量或函数时，由局部作用域到全局作用域依次查找，<span style="color:#ff502c;font-weight:bold;padding:0 2px">这些作用域的集合就称为作用域链。</span> 如果还不是很好理解，俺再举个例子​：:chestnut:
+
+```javascript
+let a = 1
+function fn() {
+    function fn1() {
+        function fn2() {
+            let c = 3;
+            console.log(a);
+        }
+        // 执行 fn2
+        fn2();
+    }
+    // 执行 fn1
+    fn1();
+}
+// 执行函数
+fn();
+```
+
+虽然上边看起来嵌套有点复杂，我们前边说过，一个函数就是一个私有作用域，根据定义，在 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">fn2</code> 作用域中打印 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a</code>，首先在自己所在作用域搜索，如果没有就向上级作用域搜索，直到搜索到全局作用域，<code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">a = 1</code>，找到了打印出值。整个搜索的过程，就是基于作用域链搜索的。
+
+![作用域链](H:\编程笔记\前端面试整理\images\闭包\作用域链.png)
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是闭包？闭包的作用？闭包的应用？</p>
+</blockquote>
+
+很多应聘者喜欢这样回答，“函数里套一个函数”，但是面试官更喜欢下面的回答，因为可以继续为你挖坑。
+
+函数执行，形成一个私有的作用域，保护里边的私有变量不受外界的干扰，除了<span style="color:#ff502c;font-weight:bold;padding:0 2px">保护</span>私有变量外，还可以<span style="color:#ff502c;font-weight:bold;padding:0 2px">保存</span>一些内容，这样的模式叫做<span style="color:#ff502c;font-weight:bold;padding:0 2px">闭包</span>。
+
+闭包的作用有两个，<span style="color:#ff502c;font-weight:bold;padding:0 2px">保护和保存。</span>
+
+
+
+**保护的应用**
+
+- 团队开发时，每个开发者把自己的代码放在一个私有的作用域中，防止相互之间的变量命名冲突；把需要提供给别人的方法，通过 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">return</code> 或 <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">window.xxx </code>的方式暴露在全局下。
+- <code style="background-color: #fff5f5;color: #ff502c;font-size: .87em;padding: .065em .4em;">jQuery</code> 的源码中也是利用了这种保护机制。
+- 封装私有变量。
+
+
+
+**保存的应用**
+
+- 选项卡闭包的解决方案。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：循环绑定事件引发的索引什么问题？怎么解决这种问题？</p>
+</blockquote>
+
+```javascript
+// 事件绑定引发的索引问题
+var btnBox = document.getElementById('btnBox'),
+    inputs = btnBox.getElementsByTagName('input')
+var len = inputs.length;
+for(var i = 0; i < 1en; i++){
+    inputs[i].onclick = function () {
+        alert(i)
+    }
+}
+```
+
+闭包剩余的部分，俺在之前的文章已经总结过，俺就不复制过来了，直接传送过去~ [动画：什么是闭包？](https://juejin.im/post/5dc6449ae51d452bd321252c#comment)
+
+
+
+### 原型和原型链
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是原型？什么是原型链？如何理解？</p>
+</blockquote>
+
+**原型：**每个 `JS` 对象都有 `__proto__` 属性，这个属性指向了原型。跟俺去看看，
+
+![原型1](H:\编程笔记\前端面试整理\images\原型\原型1.png)
+
+再来一个，
+
+![原型2](H:\编程笔记\前端面试整理\images\原型\原型2.png)
+
+我们可以看到，只要是对象类型，都会有这个`__proto__` 属性，这个属性指向的也是一个原型对象，原型对象也是对象呀，肯定也会存在一个 `__proto__` 属性。那么就形成了原型链，定义如下：
+
+**原型链**：原型链就是多个对象通过 `__proto__` 的方式连接了起来形成一条链。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>原型和原型链是怎么来的呢？如果理清原型链中的关系呢？</p>
+</blockquote>
+
+对于原型和原型链的前世今生，由于篇幅过大，俺的传送门~ [图解：告诉面试官什么是 JS 原型和原型链?](https://juejin.im/post/5db0fec4518825648c3a8770)
+
+> PS：下面的看不懂，一定去看文章哦！
+
+再往深处看，他们之间存在复杂的关系，但是这些所谓的负责关系俺已经总结好了，小二上菜
+
+![原型图](H:\编程笔记\前端面试整理\images\原型\原型图.png)
+
+这张图看起来真复杂，但是通过下边总结的，再来分析这张图，试试看。
+
+- 所有的实例的 `_proto_`都指向该构造函数的原型对象（`prototype`）。
+- 所有的函数（包括构造函数）是 `Function()` 的实例，所以所有函数的 `_proto_`的都指向 `Function() ` 的原型对象。
+- 所有的原型对象（包括 `Function` 的原型对象）都是 `Object` 的实例，所以 `_proto_`都指向 Object （构造函数）的原型对象。而 `Object` 构造函数的 `_proto_`  指向 `null`。
+- `Function` 构造函数本身就是 `Function` 的实例，所以 `_proto_` 指向 `Function` 的原型对象。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：instanceOf 的原理是什么？</p>
+</blockquote>
+
+之前留了一个小问题，总结了上述的原型和原型链之后，`instanceof `的原理很容易理解。
+
+`instanceof` 的原理是通过判断该对象的原型链中是否可以找到该构造类型的 `prototype` 类型。
+
+```javascript
+function Foo(){}
+var f1 = new Foo();
+
+console.log(f1 instanceof Foo);// true
+```
+
+![instanceof](H:\编程笔记\前端面试整理\images\原型\instanceof.jpg)
+
+### 继承
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说一说 JS 中的继承方式有哪些？以及各个继承方式的优缺点。</p>
+</blockquote>
+
+
+
+#### 经典继承（构造函数）
+
+```javascript
+/ 详细解析
+//1、当用调用 call 方法时，this 带边 son 。
+//2、此时 Father 构造函数中的 this 指向 son。
+//3、也就是说 son 有了 colors 的属性。
+//4、每 new 一个 son ，都会产生不同的对象，每个对象的属性都是相互独立的。
+function Father(){
+	this.colors = ["red","blue","green"];
+}
+
+function Son(){
+    // this 是通过 new 操作内部的新对象 {} ，
+    // 此时 Father 中的 this 就是为 Son 中的新对象{}
+    // 新对象就有了新的属性，并返回得到 new 的新对象实例
+    // 继承了Father,且向父类型传递参数
+	Father.call(this);
+}
+
+let s = new Son();
+console.log(s.color)
+```
+
+**① 基本思想：**在子类的构造函数的内部调用父类的构造函数。
+
+**② 优点：**
+
+- 保证了原型链中引用类型的独立，不被所有实例共享。
+- 子类创建的时候可以向父类进行传参。
+
+**③ 缺点:**
+
+- 继承的方法都在构造函数中定义，构造函数不能够复用了（因为构造函数中存在子类的特殊属性，所以构造函数中复用的属性不能复用了）。
+- 父类中定义的方法对于子类型而言是不可见的（子类所有的属性都定义在父类的构造函数当中）。
+
+
+
+#### 组合继承
+
+```javascript
+function Father(name){
+	this.name = name;
+	this.colors = ["red","blue","green"];
+}
+
+// 方法定义在原型对象上（共享）
+Father.prototype.sayName = function(){
+	alert(this.name);
+};
+
+function Son(name,age){
+    // 子类继承父类的属性  
+	Father.call(this,name);     //继承实例属性，第一次调用 Father()
+    // 每个实例都有自己的属性
+	this.age = age;
+}
+
+// 子类和父类共享的方法（实现了父类属性和方法的复用）                              
+Son.prototype = new Father();   //继承父类方法,第二次调用 Father()
+
+// 子类实例对象共享的方法
+Son.prototype.sayAge = function(){
+	alert(this.age);
+}
+
+var instance1 = new Son("louis",5);
+instance1.colors.push("black");
+console.log(instance1.colors);//"red,blue,green,black"
+instance1.sayName();//louis
+instance1.sayAge();//5
+
+var instance1 = new Son("zhai",10);
+console.log(instance1.colors);//"red,blue,green"
+instance1.sayName();//zhai
+instance1.sayAge();//10
+```
+
+**① 基本思想：**
+
+- 使用**原型链**实现对**「原型对象属性和方法」**的继承。
+- 通过借用**构造函数**来实现对**「实例属性」**的继承。
+
+**② 优点：**
+
+- 在原型对象上定义的方法实现了函数的复用。
+- 每个实例都有属于自己的属性。
+
+**③ 缺点：**
+
+- 组合继承调用了两次父类的构造函数，造成了不必要的消耗。
+
+
+
+#### 原型继承
+
+```javascript
+function object(o){
+	function F(){}
+	F.prototype = o;
+    // 每次返回的 new 是不同的
+	return new F();
+}
+
+var person = {
+	friends : ["Van","Louis","Nick"]
+};
+
+// 实例 1
+var anotherPerson = object(person);
+anotherPerson.friends.push("Rob");
+
+// 实例 2
+var yetAnotherPerson = object(person);
+yetAnotherPerson.friends.push("Style");
+
+// 都添加至原型对象的属性(所共享)
+alert(person.friends); // "Van,Louis,Nick,Rob,Style"
+```
+
+**① 基本思想：**创建临时性的构造函数（无任何属性），将传入的对象作为该构造函数的原型对象，然后返回这个新构造函数的实例。
+
+**② 浅拷贝：**
+
+> `object` 所产生的对象是不相同的，但是原型对象都是 `person` 对象，所改变存在原型对象的属性所有生成的实例所共享，不仅被 `Person` 所拥有，而且被子类生成的实例所共享。
+
+③ **object.create()：**在 ECMAScript5 中,通过新增 **object.create()** 方法规范化了上面的原型式继承.。
+
+- 参数一：新对象的原型的对象。
+- 参数二：先对象定义额外的属性（可选）。
+
+
+
+#### 寄生式继承
+
+```javascript
+function createAnother(original){
+	var clone = object(original); // 通过调用object函数创建一个新对象
+	clone.sayHi = function(){ // 以某种方式来增强这个对象
+		alert("hi");
+	};
+	return clone; //返回这个对象
+}
+```
+
+- **基本思想**：不必为了指定子类型的原型而调用超类型的构造函数（避免第二次调用的构造函数）。
+- **优点**：寄生组合式继承就是为了解决组合继承中两次调用构造函数的开销。
+
+
+
+### 垃圾回收机制
+
+说到 `Javascript`的垃圾回收机制，我们要从内存泄漏一步步说起。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是内存泄漏？为什么会导致内存泄漏？</p>
+</blockquote>
+
+<span style="color:#ff502c;font-weight:bold;padding:0 2px">不再用到的内存，没有及时释放，就叫做内存泄漏。</span>
+
+**内存泄漏是指我们已经无法再通过js代码来引用到某个对象，但垃圾回收器却认为这个对象还在被引用，因此在回收的时候不会释放它**。导致了分配的这块内存永远也无法被释放出来。如果这样的情况越来越多，会导致内存不够用而系统崩溃。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：怎么解决内存泄漏？说一说 JS 垃圾回收机制的运行机制的原理？。</p>
+</blockquote>
+
+很多编程语言需要手动释放内存，但是很多开发者喜欢系统提供自动内存管理，减轻程序员的负担，这被称为<span style="color:#ff502c;font-weight:bold;padding:0 2px">"垃圾回收机制"</span>。
+
+之所以会有垃圾回收机制，是因为 `js` 中的字符串、对象、数组等只有确定固定大小时，才会动态分配内存，只要像这样动态地分配了内存，最终都要释放这些内存以便他们能够被再用，否则，`JavaScript` 的解释器将会消耗完系统中所有可用的内存，造成系统崩溃
+
+`JavaScript `与其他语言不同，它具有自动垃圾收集机制，执行环境会负责管理代码执行过程中使用的内存。
+
+
+
+#### 两种垃圾回收策略
+
+找出那些不再继续使用的变量，然后释放其内存。垃圾回收器会按照固定的时间间隔，周期性的执行该垃圾回收操作。
+
+共有两种策略：
+
+- **标记清除法**
+- **引用计数法**
+
+
+
+#### 标记清除法
+
+垃圾回收器会在运行的时候，会给存储在内存中的所有变量都加上标记，然后它会去掉环境中变量以及被环境中的变量引用的变量的标记。剩下的就视为即将要删除的变量，原因是在环境中无法访问到这些变量了。最后垃圾回收器完成内存清除操作。
+
+<span style="color:#ff502c;font-weight:bold;padding:0 2px">它的实现原理就是通过判断一个变量是否在执行环境中被引用，来进行标记删除。</span>
+
+
+
+#### 引用计数法
+
+引用计数的垃圾收集策略不常用，引用计数的最基本含义就是跟踪记录每个值被引用的次数。
+
+当声明变量并将一个引用类型的值赋值给该变量时，则这个值的引用次数加 1，同一值被赋予另一个变量，该值的引用计数加 1 。当引用该值的变量被另一个值所取代，则引用计数减 1，当计数为 0 的时候，说明无法在访问这个值了，所有系统将会收回该值所占用的内存空间。
+
+<span style="color:#ff502c;font-weight:bold;padding:0 2px">存在的缺陷：</span>
+
+两个对象的相互循环引用，在函数执行完成的时候，两个对象相互的引用计数并未归 0 ，而是依然占据内存，无法回收，当该函数执行多次时，内存占用就会变多，导致大量的内存得不到回收。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>最常见的就是在 IE BOM 和 DOM 中，使用的对象并不是 js 对象，所以垃圾回收是基于计数策略的。但是在 IE9 已经将 BOM 和 DOM 真正的转化为了 js 对象，所以循环引用的问题得到解决。</p>
+</blockquote>
+
+
+
+#### 如何管理内存
+
+虽然说是 `js` 的内存都是自动管理的，但是对于 `js`  还是存在一些问题的，最主要的一个问题就是**分配给 Web 浏览器的可用内存数量通常比分配给桌面应用程序的少**。
+
+> 为了能够让页面获得最好的性能，必须确保 js 变量占用最少的内存，最好的方式就是将不用的变量引用释放掉，也叫做**解除引用**。
+
+- 对于局部变量来说，函数执行完成离开环境变量，变量将自动解除。
+- 对于全局变量我们需要进行手动解除。（注意：解除引用并不意味被收回，而是将变量真正的脱离执行环境，下一次垃圾回收将其收回）
+
+```javascript
+var a = 20;  // 在堆内存中给数值变量分配空间
+alert(a + 100);  // 使用内存
+var a = null; // 使用完毕之后，释放内存空间
+```
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>补充：因为通过上边的垃圾回收机制的标记清除法的原理得知，只有与环境变量失去引用的变量才会被标记回收，所用上述例子通过将对象的引用设置为 null ，此变量也就失去了引用，等待被垃圾回收器回收。</p>
+</blockquote>
+
+
+
+### 深拷贝和浅拷贝
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是深拷贝？什么是浅拷贝？</p>
+</blockquote>
+
+上边在 `JavaScript` 基本类型中我们说到，数据类型分为**基本类型和引用类型**。对基本类型的拷贝就是对值复制进行一次拷贝，而对于引用类型来说，拷贝的不是值，而是**值的地址**，最终两个变量的地址指向的是同一个值。还是以前的例子：
+
+```javascript
+var a = 10;
+var b = a;
+b = 30;
+console.log(a); // 10值
+console.log(b); // 30值
+
+var obj1 = new Object();
+var obj2 = obj1;
+obj2.name = "小鹿";
+console.log(obj1.name); // 小鹿
+```
+
+
+
+要想将 `obj1` 和 `obj2` 的关系断开，也就是不让他指向同一个地址。根据不同层次的拷贝，分为深拷贝和浅拷贝。
+
+- **浅拷贝：**只进行一层关系的拷贝。
+- **深拷贝：**进行无限层次的拷贝。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：浅拷贝和深拷贝分别如何实现的？有哪几种实现方式？</p>
+</blockquote>
+
+- 自己实现一个浅拷贝：
+
+```javascript
+// 实现浅克隆
+function shallowClone(o){
+    const obj = {};
+    for(let i in o){
+        obj[i] = o[i]
+    }
+    return obj;
+}
+```
+
+- 扩展运算符实现：
+
+```javascript
+let a = {c: 1}
+let b = {...a}
+a.c = 2
+console.log(b.c) // 1
+```
+
+- `Object.assign() `实现
+
+```javascript
+let a = {c: 1}
+let b = Object.assign({}, a)
+a.c = 2
+console.log(b.c) // 1
+```
+
+
+
+对于深拷贝来说，在浅拷贝的基础上加上递归，我们改动上边自己实现的浅拷贝代码：
+
+```javascript
+var a1 = {b: {c: {d: 1}};
+function clone(source) {
+    var target = {};
+    for(var i in source) {
+        if (source.hasOwnProperty(i)) {
+            if (typeof source[i] === 'object') {
+                target[i] = clone(source[i]); // 递归
+            } else {
+                target[i] = source[i];
+            }
+        }
+    }
+    return target;
+}
+```
+
+如果功底稍微扎实的小伙伴可以看出上边深拷贝存在的问题：
+
+- 参数没有做检验;
+- 判断对象不够严谨;
+- 没有考虑到数组，以及 `ES6` 的 `set, map, weakset, weakmap `兼容性。
+- 最严重的问题就是递归容易爆栈（递归层次很深的时候）。
+- 循环引用问题提。
+
+```javascript
+var a = {};
+a.a = a;
+clone(a); // 会造成一个死循环
+```
+
+两种解决循环引用问题的办法：
+
+- **暴力破解**
+- **循环检测**
+
+
+
+还有一个最简单的实现深拷贝的方式，那就是利用 `JSON.parse(JSON.stringify(object))`,但是也存在一定的局限性。
+
+```javascript
+function cloneJSON(source) {
+    return JSON.parse(JSON.stringify(source));
+}
+```
+
+对于这种方法来说，内部的原理实现也是使用的递归，递归到一定深度，也会出现爆栈问题。但是对于循环引用的问题不会出现，内部的解决方案正是用到了循环检测。对于详细的实现一个深拷贝，具体参考文章：[[深拷贝的终极探索](https://segmentfault.com/a/1190000016672263)](https://segmentfault.com/a/1190000016672263)
+
+
+
+### 异步编程
+
+由于 ` JavaScript` 是单线程的，单线程就意味着阻塞问题，当一个任务执行完成之后才能执行下一个任务。这样就会导致出现页面卡死的状态，页面无响应，影响用户的体验，所以不得不出现了同步和异步的解决方案。
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：JS 为什么是单线程？又带来了哪些问题呢？</p>
+</blockquote>
+
+JS 单线程的特点就是同一时刻只能执行一个任。这是由一些与用户的互动以及操作 `DOM` 等相关的操作决定了 JS 要使用单线程，否则使用多线程会带来复杂的同步问题。如果执行同步问题的话，多线程需要加锁，执行任务造成非常的繁琐。
+
+虽然 HTML5 标准规定，允许 `JavaScript` 脚本创建多个线程，但是子线程完全受主线程控制，且不得操作 `DOM`。
+
+上述开头我们也说到了，单线程带来的问题就是会导致阻塞问题，为了解决这个问题，就不得不涉及 JS 的两种任务，分别为同步任务和异步任务。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：JS 如何实现异步编程？</p>
+</blockquote>
+
+最早的解决方案是使用回调函数，回调函数不是直接调用，而是在特定的事件或条件发生时另一方调用的，用于对该事件或条件进行响应。比如 Ajax 回调： 
+
+```javascript
+// jQuery 中的 ajax
+$.ajax({ 
+    type : "post", 
+    url : 'test.json', 
+    dataType : 'json', 
+    success : function(res) { 
+       // 响应成功回调
+    },
+    fail: function(err){
+       // 响应失败回调
+    }
+}); 
+```
+
+但是如果某个请求存在依赖性，如下：
+
+```javascript
+$.ajax({
+    type:"post",
+    success: function(res){//成功回调
+        //再次异步请求
+        $.ajax({
+            type:"post",
+            url:"...?id=res.id,
+            success:function(res){
+                 $.ajax({
+                    type:"post",
+                    url:"...?id=res.id,
+                    success:function(){
+						// 往复循环
+                    }
+                })
+            }
+        })
+    }
+})
+```
+
+就会形成不断的循环嵌套，我们称之为回调地狱。我们可以看出回调地狱有以下缺点：
+
+- 嵌套函数存在耦合性，一旦有所改动，牵一发而动全身。
+- 嵌套函数一多，就很难处理错误。
+- 回调函数不能使用 `try catch ` 捕获异常(异常的捕获只能在函数执行的时候才能捕获到)。
+- 回调函数不能直接 `return `。
+
+
+
+以上有两个地方俺需要再进一步详细说明一下：
+
+- **为什么不能捕获异常？**
+
+其实这跟 `js` 的运行机制相关，异步任务执行完成会加入任务队列，当执行栈中没有可执行任务了，主线程取出任务队列中的异步任务并入栈执行，当异步任务执行的时候，捕获异常的函数已经在执行栈内退出了，所以异常无法被捕获。
+
+- **为什么不能return？**
+
+`return` 只能终止回调的函数的执行，而不能终止外部代码的执行。
+
+
+
+<blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：如何解决回调地狱问题呢？</p>
+</blockquote>
+
+既然回调函数存在回调地狱问题，那我们如何解决呢？ES6 给我们提供了三种解决方案，分别是 Generator、Promise、async/await（ES7）。
+
+由于这部分涉及到 ES6 部分的知识，这一期是有关 JS 的，所以会在下一期进行延伸，这里不多涉及。
+
+【留下一个传送门~】
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说异步代码的执行顺序？Event Loop 的运行机制是如何的运行的？</p>
+</blockquote>
+
+上边我们说到 ` JS`  是单线程且使用同步和异步任务解决 `JS` 的阻塞问题，那么异步代码的执行顺序以及 `EventLoop` 是如何运作的呢？
+
+在深入事件循环机制之前，需要弄懂一下几个概念：
+
+- <span style="color:#ff502c;font-weight:bold;padding:0 2px">执行上下文</span>(`Execution context`)
+- <span style="color:#ff502c;font-weight:bold;padding:0 2px">执行栈</span>（`Execution stack`）
+- <span style="color:#ff502c;font-weight:bold;padding:0 2px">微任务</span>（`micro-task`）
+- <span style="color:#ff502c;font-weight:bold;padding:0 2px">宏任务</span>（`macro-task`）
+
+
+
+#### 执行上下文
+
+执行上下文是一个抽象的概念，可以理解为是代码执行的一个环境。JS 的执行上下文分为三种，<span style="color:#ff502c;font-weight:bold;padding:0 2px">全局执行上下文、函数(局部)执行上下文、Eval 执行上下文</span>。
+
+- **全局执行上下文：**全局执行上下文指的是全局 `this` 指向的 `window`，可以是外部加载的 JS 文件或者本地`<scripe></script>`标签中的代码。
+- **函数执行上下文：**函数上下文也称为局部上下文，每个函数被调用的时候，都会创建一个新的局部上下文。
+- **Eval 执行上下文：** 这个不经常用，所以不多讨论。
+
+
+
+#### 执行栈
+
+执行栈，就是我们数据结构中的“栈”，它具有“先进后出”的特点，正是因为这种特点，在我们代码进行执行的时候，遇到一个执行上下文就将其依次压入执行栈中。
+
+当代码执行的时候，先执行位于栈顶的执行上下文中的代码，当栈顶的执行上下文代码执行完毕就会出栈，继续执行下一个位于栈顶的执行上下文。
+
+```javascript
+function foo() {
+  console.log('a');
+  bar();
+  console.log('b');
+}
+
+function bar() {
+  console.log('c');
+}
+
+foo();
+```
+
+- 初始化状态，执行栈任务为空。
+- `foo` 函数执行，`foo` 进入执行栈，输出 `a`，碰到函数` bar`。
+- 然后 bar 再进入执行栈，开始执行 `bar` 函数，输出 `c`。
+- `bar` 函数执行完出栈，继续执行执行栈顶端的函数 `foo`，最后输出 `c`。
+- `foo` 出栈，所有执行栈内任务执行完毕。
+
+![执行栈](H:\编程笔记\前端面试整理\images\原型\执行栈.gif)
+
+
+
+#### 宏任务
+
+对于宏任务一般包括：
+
+- 整体的 `script` 标签内的代码，
+- `setTimeout`
+- `setInterval`
+- `setImmediate`
+- `I/O`
+
+
+
+#### 微任务
+
+对于微任务一般包括：
+
+- `Promise`
+- `process.nextTick`(Node)
+- `MutationObserver`
+
+
+
+> 注意：nextTick 队列会比 Promie 队列先执行。
+
+
+
+以上概念弄明白之后，再来看循环机制是如何运行的呢？以下涉及到的任务执行顺序都是靠函数调用栈来实现的。
+
+1）首先，事件循环机制的是从 `<script>` 标签内的代码开始的，上边我们提到过，整个 script 标签作为一个宏任务处理的。
+
+2）在代码执行的过程中，如果遇到宏任务，如：`setTimeout`，就会将当前任务分发到对应的执行队列中去。
+
+3）当执行过程中，如果遇到微任务，如：`Pomise`，在创建 `Promise `实例对象时,代码顺序执行，如果到了执行· `then` 操作，该任务就会被分发到微任务队列中去。
+
+4）`script` 标签内的代码执行完毕，同时执行过程中所涉及到的宏任务也和微任务也分配到相应的队列中去。
+
+5）此时宏任务执行完毕，然后去微任务队列执行所有的存在的微任务。
+
+6）微任务执行完毕，第一轮的消息循环执行完毕，页面进行一次渲染。
+
+7）然后开始第二轮的消息循环，从宏任务队列中取出任务执行。
+
+8）如果两个任务队列没有任务可执行了，此时所有任务执行完毕。
+
+
+
+**实战一下：**
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>消息运行机制</title>
+</head>
+<body>
+
+</body>
+    <script>
+        console.log('1');
+        setTimeout(() => {
+            console.log('2')
+        }, 1000);
+        new Promise((resolve, reject) => {
+            console.log('3');
+            resolve();
+            console.log('4');
+        }).then(() => {
+            console.log('5');
+        });
+        console.log('6');// 1,3,4,6,5,2
+    </script>
+</html>
+```
+
+- 初始化状态，执行栈为空。
+- 首先执行 `<script>` 标签内的同步代码，此时全局的代码进入执行栈中，同步顺序执行代码，输出 1。
+- 执行过程中遇到异步代码 `setTimeout`（宏任务），将其分配到宏任务异步队列中。
+- 同步代码继续执行，遇到一个 `promise` 异步代码（微任务）。但是构造函数中的代码为同步代码，依次输出3、4，则 then 之后的任务加入到微任务队列中去。
+- 最后执行同步代码，输出 6。
+- 因为 `script`内的代码作为宏任务处理，所以此次循环进行到处理微任务队列中的所有异步任务，直达微任务队列中的所有任务执行完成为止，微任务队列中只有一个微任务，所以输出 5。
+- 此时页面要进行一次页面渲染，渲染完成之后，进行下一次循环。
+- 在宏任务队列中取出一个宏任务，也就是之前的 `setTimeout`，最后输出 2。
+- 此时任务队列为空，执行栈中为空，整个程序执行完毕。
+
+![消息循环](H:\编程笔记\前端面试整理\images\消息循环\消息循环.gif)
+
+
+
+以上难免有些啰嗦，所以简化整理如下步骤：
+
+- 一开始执行宏任务（`script `中同步代码），执行完毕，调用栈为空。
+- 然后检查微任务队列是否有可执行任务，执行完所有微任务。
+- 进行页面渲染。
+- 第二轮从宏任务队列取出一个宏任务执行，重复以上循环。
 
 
 
