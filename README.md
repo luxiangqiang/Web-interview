@@ -60,9 +60,9 @@
     - [发展前景](#3、发展前景)
 
 - [JavaScript 基础知识点](#JavaScript基础知识点)
-    
+  
     - [数据类型](#数据类型)
-        
+      
         - [1、数据类型的存储形式](#1、数据类型的存储形式) 
         - [2、Null](#2、Null) 
         - [3、数据类型的判断](#3、数据类型的判断) 
@@ -90,9 +90,34 @@
         - [执行栈](#执行栈) 
         - [宏任务](#宏任务) 
         - [微任务](#微任务) 
-        - [运行机制](#运行机制) 
+        - [运行机制](#运行机制)
         
-        
+
+- [ES6 基础知识点](#ES6基础知识点)
+  - [变量提升](#变量提升) 
+  - [var、let、const](#var、let、const) 
+  - [map、filter、reduce ](#map、filter、reduce)
+    - [map](#map) 
+    - [filter](#filter) 
+    - [reduce](#reduce) 
+  - [Proxy](#Proxy) 
+    - [字面量定义](#字面量定义)
+    - [ES6 中的 Class 定义](#ES6中的Class定义)
+    - [Object.definedProperty()](#Object.definedProperty())
+    - [Proxy 代理](#Proxy代理)
+  - [ES6/7 的异步编程](#ES6/7的异步编程) 
+    - [Generator 生成器](#Generator生成器)
+    - [Promise](#Promise)
+    - [async 及 await](#async及await)
+  - [模块化](#模块化)
+    - [方式一：函数](#方式一：函数)
+    - [方式二：立即执行函数](#方式二：立即执行函数)
+    - [方式三：CommonJS](#方式三：CommonJS)
+    - [方式四：AMD 和 CMD](#方式四：AMD和CMD)
+    - [方式五：ES6 Moudle](#方式五：ES6Moudle)
+    - [小结](#小结)
+
+
 
 ## 本系列介绍
 
@@ -1922,4 +1947,864 @@ foo();
 
 
 
-### 作者持续更新中....
+## ES6 基础知识点
+
+### 变量提升
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是变量提升？为什么存在变量提升？</p>
+</blockquote>
+
+变量提升就是该变量还未被声明，但是却可以使用未声明的变量。
+
+虽然描述为提升，但不是真正的将代码提升到顶部，而是在代码执行前，先在词法环境中进行了注册。
+
+如果没有变量提升，下方代码就无法执行：
+
+```javascript
+function fn1(){
+    fn2();
+}
+
+function fn2(){
+    fn1();
+}
+
+fn1();
+```
+
+变量提升的根本原因就是为了解决函数之间互相调用的情况。
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：变量和函数怎么进行提升的？优先级是怎么样的？</p>
+</blockquote>
+
+- **第一阶段：**对所有**函数声明**进行提升（**忽略表达式和箭头函数**），引用类型的赋值（函数的声明，函数的提升代表着可执行，因为提升之后保持着引用）分为三步：
+  - 开辟堆空间
+  - 存储内容
+  - 将地址赋值给变量
+- **第二阶段：**对所**有的变量**进行提升，全部赋值为 `undefined`（如果已经存在，不赋值为`undefined`）。然后依次顺序执行代码。
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>PS：使用 let 和 const 时，我们不能在声明之前使用变量，这叫做暂时性死区。</p>
+</blockquote>
+
+
+
+### var、let、const
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：var、let、const 三者的区别什么？</p>
+</blockquote>
+
+- `var` 存在变量提升，而 `let、const` 则不会。
+- `var` 声明的变量会挂载到 `window` 上，而其他两者不会。
+- `let ` 和 ` const ` 的作用基本一致，后者声明的变量不能再次赋值（注意：但是能改变值）
+
+
+
+### map、filter、reduce 
+
+这三个的区别经常出现于面试中，同时在实际项目中也是会频繁的使用，从如何使用到什么业务逻辑下使用是非常重要滴~
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 map、filter、reduce三者的使用以及区别是什么？</p>
+</blockquote>
+
+#### map
+
+`map` 的作用是 `map` 中传入一个函数，该函数会遍历该数组，对每一个元素做变换之后返回新数组。
+
+- `element :`  对应数组的每个元素。
+- `index `: 数组元素的下标。
+- `arr :` 原数组。
+
+```javascript
+let arr = [2,3,4]
+arr = arr.map(function(element,index,arr){
+    return arr[index]+1;
+}) // [3,4,5]
+```
+
+#### filter
+
+`filter` 的作用是也是生成一个数组，传入的函数返回值确实布尔类型，返回值为 `true` 的元素放入新数组，通常来筛选删除不需要的元素。
+
+- `element :`  对应数组的每个元素。
+- `index :` 数组元素的下标。
+- `arr :` 原数组。
+
+```javascript
+let array = [1, 2, 4, 6]
+let arr = array.filter(function(element){
+	return element != 6;
+})// [1,2,4]
+```
+
+#### reduce 
+
+`reduce` 可以将数组中的元素通过回调函数最终转换为一个值。	
+
+- `acc：`累计值(第一次的值代表初始化的值)。
+- `element：` 当前元素。
+- `index：` 当前索引。
+- `arr：` 原数组。
+
+```javascript
+let arr = [1,2,3]
+let sum = arr.reduce(function(acc,element){
+    return acc + element;
+},0) // 6
+
+```
+
+
+
+### Proxy
+
+对于 `Proxy` 代理我们从最基本的 `getter` 和 `setter` 说起~
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：通过 getter 与 setter 访问属性值有什么好处？代理与 getter 和 setter 的主要区别是什么？</blockquote>
+
+我们为什么会使用 `getter` 和 `setter ` 来进行控制对值的访问呢，有以下是三个作用：
+
+- 避免意外的错误发生。
+- 需要记录属性的变化：比如属性值的访问日志记录。
+- 数据绑定：在 `vue` 中使用的数据的双向绑定。
+
+
+
+对于有哪几种方式来定义 `getter` 和 `setter` 呢？
+
+- 字面量定义;
+- `ES6` 中的 `Class` 定义;
+- 使用 `Object.definedProperty` 方法;
+
+
+
+#### 字面量定义
+
+对象访问属性通常隐式调用 `getter` 和 `setter` 方法，属性自动关联 `getter` 和 `setter` 方法。这些都是标准方法，在访问属性的时候都是立即执行的。
+
+```javascript
+const collection = {
+	name='xiaolu',
+	
+	// 读取属性
+	get name(){
+		return this.name;
+	}
+	// 设置属性
+	set name(value){
+		this.name = value;
+	}
+}
+collection.name 			// 隐士调用 getter 方法
+collection.name = "xiaolu1" // 隐士调用 setter 方法
+
+```
+
+
+
+#### ES6 中的 Class 定义
+
+```javascript
+// calss 定义 setter 和 getter
+class Xiaolu {
+    constructor(){
+        this.name = 'xiaolu'
+    }
+	
+    get firstXiaolu(){
+        console.log('属性已访问')
+        return this.name;
+    }
+	
+    set firstXiaolu(value){
+        this.name = value;
+    }
+}
+
+const x = new Xiaolu();
+x.firstXiaolu
+
+```
+
+
+
+#### Object.definedProperty()
+
+对象的字面量与类、`getter` 和 `setter` 方法不是在一同一作用域定义的，因此那些希望作为私有变量属性的标量是无法实现的。
+
+```javascript
+// Object.definedProperty
+function xiaolu(){
+    let count = 0;
+	
+    Object.defineProperty(this,'skillLevel',{
+        get:() => {
+            return count;
+        },
+        set:value => {
+            count = value;
+        }
+    })
+}
+// 隐士的调用 get 方法
+console.log(xiaolu.count)
+
+```
+
+通过 `Object.definedProperty()` 创建的 `get` 和 `set` 方法，与私有的变量处于相同的作用域中，`get `和 `set `方法分别创建了含有私有变量的闭包。
+
+
+
+#### Proxy 代理
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 ES6 中的 Proxy 和 getter、setter 的区别？</blockquote>
+
+代理 `proxy` 是 `ES6` 新提出的。代理（`proxy`）使我们通过代理控制对另一个对象的访问。`proxy ` 和 `getter` 以及 `setter ` 的区别是，`getter `和 `setter` 仅仅控制的是单个对象属性，而 `proxy ` 代理的是对象交互的通用处理，包括对象的方法。
+
+**用法：**
+
+- **`target`：**要进行代理的对象。
+- **`handler`：**是一个特定的对象，定义了特定行为时触发的函数。
+
+```javascript
+var proxy = new Proxy(target, handler);
+
+```
+
+**`get` 和 `set` 的参数：**
+
+- `target:` 传入的对象。
+- `key:` 属性。
+- `value:` 要赋的值。
+
+```javascript
+const obj = {name:'xiaolu'}
+const representtive = new Proxy(obj, {
+    get: (target, key) =>{
+        return key in target ? target[key]:"不存在该值“
+    },
+    set: (target, key, value)=>{
+        target[key] = value;
+    }
+})
+
+```
+
+我们试图想使用代理访问对象时，此时会触发 `get ` 方法。或者试图将代理的对象进行赋值时，会触发调用 `set `方法。
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 Proxy 的基本应用？</blockquote>
+
+最基本的应用如下一个：
+
+- 日志记录 —— 当访问属性时，可以在 `get` 和 `set 中记录访问日志。
+- 校验值 —— 有效的避免指定属性类型错误的发生。
+- 定义如何计算属性值 —— 每次访问属性值，都会进行计算属性值。
+- 数据的双向绑定（`Vue`）—— 在 ` Vue3.0` 中将会通过 `Proxy` 来替换原本的 `Object.defineProperty` 来实现数据响应式。
+
+```javascript
+// 校验值
+function xiaolu(){
+    let count = 0;
+	
+    Object.defineProperty(this,'skillLevel',{
+        get:() => {
+            return count;
+        },
+        set:value => {
+            if(!Number.isInteger(value)){
+                throw new TypeError("抛出错误")
+            }
+            count = value;
+        }
+    })
+}
+```
+
+```javascript
+// 定义如何计算属性值 
+const collection = {
+    name:'xiaolu',
+    age:'2',
+    // 读取属性
+    get getName(){
+        return this.name + " "+this.age;
+    },
+    // 设置属性
+    set setName(value){
+        this.name = value;
+    }
+}
+
+console.log(collection.getName)
+```
+
+
+
+### ES6/7 的异步编程
+
+在之前的 `js` 基础面试知识一篇中，我们说到了异步编程，留一下一个传送门，直接传送到这里了。上回说到，要想解决函数回调地狱问题，我们要用到 `ES6/ES7 `中的一些内容，在这一节，小鹿会详细的分享~
+
+
+
+#### Generator 生成器
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 Generator 是如何使用的？以及各个阶段的状态是如何变化的？</blockquote>
+
+使用生成器函数可以生成一组值的序列，每个值的生成是基于每次请求的，并不同于标准函数立即生成。
+
+调用生成器不会直接执行，而是通过叫做**迭代器**的对象控制生成器执行。
+
+```javascript
+function* WeaponGenerator(){
+    yield "1";
+    yield "2";
+    yield "3";
+}
+
+for(let item of WeaponGenerator()){
+    console.log(item);
+}
+//1
+//2
+//3
+
+```
+
+使用迭代器控制生成器。
+
+- 通过调用生成器返回一个迭代器对象，用来控制生成器的执行。
+- 调用迭代器的 `next` 方法向生成器请求一个值。
+- 请求的结果返回一个对象，对象中包含一个` value `值和 `done `布尔值，告诉我们生成器是否还会生成值。
+- 如果没有可执行的代码，生成器就会返回一个 `undefined` 值，表示整个生成器已经完成。
+
+```javascript
+function* WeaponGenerator(){
+    yield "1";
+    yield "2";
+    yield "3";
+}
+
+let weapon = WeaponGenerator();
+console.log(weapon.next());
+console.log(weapon.next());
+console.log(weapon.next());
+
+```
+
+状态变化如下：
+
+- 每当代码执行到 `yield` 属性，就会生成一个中间值，返回一个对象。
+- 每当生成一个值后，生成器就会非阻塞的挂起执行，等待下一次值的请求。
+- 再次调用 `next` 方法，将生成器从挂起状态唤醒，中断执行的生成器从上次离开的位置继续执行。
+- 直到遇到下一个 `yield` ，生成器挂起。
+- 当执行到没有可执行代码了，就会返回一个结果对象，`value` 的值为 `undefined `, `done` 的值为 `true`，生成器执行完成。
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 Generator 内部结构实现？</blockquote>
+
+生成器更像是一个状态运动的状态机。
+
+- 挂起开始状态——创建一个生成器处于未执行状态。
+- 执行状态——生成器的执行状态。
+- 挂起让渡状态——生成器执行遇到第一个 yield 表达式。
+- 完成状态——代码执行到 return 全部代码就会进入全部状态。
+
+**执行上下文跟踪生成器函数。**
+
+```javascript
+function* WeaponGenerator(action){
+    yield "1"+action;
+    yield "2";
+    yield "3";
+}
+
+let Iterator = WeaponGenerator("xiaolu");
+let result1 = Iterator.next()
+let result2 = Iterator.next()
+let result3 = Iterator.next()
+
+```
+
+- 在调用生成器之前的状态——只有全局执行上下文，全局环境中除了生成器变量的引用，其他的变量都为 `undefined`。
+- 调用生成器并没有执行函数，而是返回一个 `Iterator `迭代器对象并指向当前生成器的上下文。
+- 一般函数调用完成上下文弹出栈，然后被摧毁。当生成器的函数调用完成之后，当前生成器的上下文出栈，但是在全局的迭代器对象还与保持着与生成器执行上下文引用，且生成器的词法环境还存在。
+- 执行 `next` 方法，一般的函数会重新创建执行上下文。而生成器会重新激活对应的上下文并推入栈中（这也是为什么标准函数重复调用时，重新从头执行的原因所在。与标准函数相比较，生成器暂时会挂起并将来恢复）。
+- 当遇到 `yield `关键字的时候，生成器上下文出栈，但是迭代器还是保持引用，处于非阻塞暂时挂起的状态。
+- 如果遇到 `next` 指向方法继续在原位置继续 执行，直到遇到 `return ` 语句，并返回值结束生成器的执行，生成器进入结束状态。
+
+
+
+#### Promise
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 Promise 的原理？你是如何理解 Promise 的？</blockquote>
+
+在深入 `Promise` 之前，我们先想想 Why（为什么）会有 `Promise`，`Promise` 的诞生解决了哪些问题呢？
+
+小鹿总结到的原因有两方面，第一，由于 JS 的运行时单线程的，所以当执行耗时的任务时，就会造成 UI 渲染的阻塞。当前的解决方法是使用回调函数来解决这个问题，当任务执行完毕会，会调用回调方法。
+
+第二就是回调函数存在以下几个缺点：
+
+- 不能捕捉异常（错误处理困难）——回调函数的代码和开始任务代码不在同一事件循环中；
+- 回调地域问题（嵌套回调）；
+- 处理并行任务棘手（请求之间互不依赖）；
+
+
+
+**实现一个简单的 Promise:**
+
+```javascript
+let promise = new Promise(function(resolve, reject) {
+    resolve();
+});
+
+promise.then((res)=>{
+    console.log("回调成功！")
+},(err) =>{
+    console.log("回调失败！")
+});
+
+```
+
+- 通过内置的 `Promise` 构造函数可以创建一个 `Promise` 对象，构造函数中传入两个函数参数：`resolve`，`reject`。两个参数的作用是，在函数内手动调用 ` resolve ` 的时候，就说明回调成功了；调用  `reject ` 说明调用失败。通常在 promise 中进行耗时的异步操作，响应是否成功，我们根据判断就可以调用对应的函数。
+- 调用 `Promise ` 对象内置的方法 `then`，传入两个函数，一个是成功回调的函数，一个失败回调的函数。当再 `promise` 内部调用 ` resolve` 函数时，之后就会回调 `then` 方法里的第一个函数。当调用了 reject 方法时，就会调用` then` 方法的第二个函数。
+- `promise` 相当于是一个承诺，当承诺兑现的时候（调用了 `resolve` 函数），就会调用 then 中的第一个回调函数，在回调函数中做处理。当承诺出现未知的错误或异常的时候（调用了 `reject` 函数），就会调用 `then` 方法的第二个回调函数，提示开发者出现错误。
+
+
+
+**Promise 的状态：**
+
+其实 `Promise` 对象用作异步任务的一个占位符，代表暂时还没有获得但在未来获得的值。
+
+`Promise` 共有三种状态，完成状态和拒绝状态状态都是由等待状态转变的。一旦 `Promise `进入了拒绝或完成状态，它的状态就不能切换了。
+
+- **等待状态（pending）**
+- **完成状态（resolve）**
+- **拒绝状态（reject）**
+
+`Promise ` 共有两种拒绝状态：显示拒绝（直接调用 `reject`）和隐式拒绝（抛出异常）。
+
+
+
+**一个 `Promise` 实例：**
+
+> 客户端请求服务器是最常用的异步任务，下面实现一下。
+
+```javascript
+function getJson(url){
+    // 返回一个 promise 对象
+    return new Promise((resolve,reject)=>{
+        const request = new XMLHttpRequest();
+        request.open("GET",url);
+
+        // 服务器响应成功
+        request.onload = function(){
+            //try-catch 考虑到 JSON 可能解析会出现错误
+            try{
+                // 响应码正确且 JSON 解析正确
+                if(this.status == 200){
+                    // 调用成功承诺
+                    resolve(JSON.parse(this.response))
+                }else{
+                    // 调用失败承诺
+                    reject(this.status + " " +this.statusText);
+                }
+            }catch(e){
+                // 调用失败承诺
+                reject(e.message)
+            }
+        }
+
+        // 服务器响应失败
+        request.onerror = function(){
+            // 调用失败承诺
+            reject(this.status + " " +this.statusText);
+        }
+
+        // 发送请求
+        request.send();
+
+    })
+}
+
+// 调用上述异步请求
+getJson("url").then((res)=>{
+    console.log("解析的JSON数据为:"+res)
+},(res)=>{
+    console.log("错误信息："+res)
+})
+```
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：什么是 Promise 链？说说 Promise 如何使用的？</blockquote>
+
+`promise `可以实现链式调用，每次` then` 之后返回的都是一个` promise `对象，可以紧接着使用 `then `继续处理接下来的任务，这样就实现了链式调用。如果在 then 中使用了` return`，那么 return 的值也会被` Promise.resove() `包装。
+
+```javascript
+Promise.resolve(1)
+  .then(res => {
+    console.log(res) // => 1
+    return 2 // 包装成 Promise.resolve(2)
+  })
+  .then(res => {
+    console.log(res) // => 2
+  })
+
+```
+
+`Promise` 最常用的使用方式有以下几个方式：
+
+**嵌套任务处理：**
+
+```javascript
+// 链式回调
+getJson("url")
+    .then(n => {getJson(n[0].url)})
+    .then(m => {getJson(m[0].url)})
+    .then(w => {getJson(w[0].url)})
+    .catch((error => {console.log("异常错误！")}))
+
+```
+
+- 因为 `then `方法会返回一个 `promise` 对象，所以连续调用 `then` 方法可以进行链式调用 `promise `。
+- 多个异步任务中可能出现错误，只需要调用一个 `catch` 方法并向其传入错误处理的回调函数。
+
+
+
+**并行处理任务：**
+
+上述的链式调用主要处理的是多个异步任务之间存在依赖性的，如果同时执行多个异步任务，就是用 `promise` 中的 `all` 方法。
+
+```javascript
+ // 并行处理多个异步任务
+Promise.all([getJson(url),
+             getJson(url),
+             getJson(url)]).then(resule => {
+                 // 如果三个请求都响应成功
+                 if(result[0] == 1 && result[1] == 1 && result[2] == 1){
+                     console.log("请求成功！")
+                 }
+             }).catch(error => {console.log("异常错误！")})
+
+```
+
+- 使用 `Promise.all() `方法进行异步请求，将多个请求任务封装数组进行同步请求。
+- 返回的结果值会打包成一个数组，可以通过数组的下标获取值对返回的结果进行判断。
+- 只有全部请求成功才会进入成功的方法，否则就会调用 `catch` 抛出异常。
+- 与 `Promise.race() `方法不同的是，`race `方法只要其中一个返回成功，就会调用成功的方法。
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说怎么实现一个 Promise？</blockquote>
+
+我们根据 `Promise` 的执行顺序，手动实现一个 `Promise`。
+
+- 先执行 `MyPromise` 构造函数；
+- 注册 `then` 函数；
+- 此时的 `promise ` 挂起，`UI` 非堵塞，执行其他的同步代码；
+- 执行回调函数。
+
+```javascript
+// 三种状态
+const PENDING = "pending";
+const RESOLVE = "resolve";
+const REJECT = "reject";
+
+// promise 函数
+function MyPromise(fn){
+    const that = this;           // 回调时用于保存正确的 this 对象
+    that.state = PENDING;        // 初始化状态
+    that.value = null;           // value 用于保存回调函数(resolve/reject 传递的参数值)
+    that.resolvedCallbacks = []; // 用于保存 then 中的回调
+    that.rejectedCallbacks = [];
+
+    // resolve 和 reject 函数 
+    function resolve(value) {
+        if(that.state === PENDING){
+            that.state = 'resolve';
+            that.value = value;
+            that.resolvedCallbacks.map(cb => cb(that.value));
+        }
+    }
+
+    function reject(value) {
+        if (that.state === PENDING) {
+            that.state = 'reject'
+            that.value = value
+            that.rejectedCallbacks.map(cb => cb(that.value))
+        }
+    }
+
+    // 实现如何执行 Promise 中传入的函数
+    try {
+        fn(resolve, reject)
+    } catch (e) {
+        reject(e)
+    }
+}
+
+// 实现 then 函数
+MyPromise.prototype.then = function(onResolved, onRejected) {
+    const that = this;
+    // 判断两个参数是否为函数类型(如果不是函数，就创建一个函数赋值给对应的参数)
+    onResolved = typeof onResolved === 'function' ? onResolved : v => v;
+    onRejected = typeof onRejected === 'function' ? onRejected : r => {throw r}
+
+    // 判断当前的状态
+    if (that.state === 'pending') {
+        that.resolvedCallbacks.push(onResolved)
+        that.rejectedCallbacks.push(onRejected)
+    }
+    if (that.state === 'resolve') {
+        onResolved(that.value)
+    }
+    if (that.state === 'reject') {
+        onRejected(that.value)
+    }
+}
+
+new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(1)
+    }, 0)
+}).then(value => {
+    console.log(value)
+})
+```
+
+
+
+#### async 及 await
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：async 及 await 和 Generator 以及 Promise 什么区别？它们的优点和缺点分别是什么？await 原理是什么？</blockquote>
+
+其实 `ES7` 中的 `async` 及 `await `就是 `Generator` 以及 `Promise` 的语法糖，内部的实现原理还是原来的，只不过是在写法上有所改变，这些实现一些异步任务写起来更像是执行同步任务。
+
+
+
+**async 及 await 的特点：**
+
+一个函数前加上 `async `关键字，就将该函数返回一个 `Promise`，`async`  直接将返回值使用 `Promise.resolve()` 进行包裹（与 then 处理效果相同）。
+
+`await` 只能配套 `async` 使用，`await` 内部实现了 `generator`，`await` 就是 `generator` 加上 `Promise` 的语法糖，且内部实现了自动执行 `generator`。
+
+
+
+**async  和 await 的优缺点？**
+
+- **内置执行器。** Generator 函数的执行必须靠执行器，所以才有了 co 函数库，而 async 函数自带执行器。也就是说，async 函数的执行，与普通函数一模一样，只要一行。
+- **更好的语义。** async 和 await，比起星号和 yield，语义更清楚了。async 表示函数里有异步操作，await 表示紧跟在后面的表达式需要等待结果。
+- **更广的适用性。** co 函数库约定，yield 命令后面只能是 Thunk 函数或 Promise 对象，而 async 函数的 await 命令后面，可以跟 Promise 对象和原始类型的值（数值、字符串和布尔值，但这时等同于同步操作）。
+
+**缺点：**
+
+因为 `await` 将异步代码改造成了同步代码，如果多个异步代码没有依赖性却使用了 `await` 会导致性能上的降低。
+
+
+
+**await 原理是什么？**
+
+`async ` 函数的实现，就是将 `Generator `函数和自动执行器，包装在一个函数里。
+
+```javascript
+function spawn(genF) {
+  return new Promise(function(resolve, reject) {
+    var gen = genF();
+    function step(nextF) {
+      try {
+        var next = nextF();
+      } catch(e) {
+        return reject(e); 
+      }
+      if(next.done) {
+        return resolve(next.value);
+      } 
+      Promise.resolve(next.value).then(function(v) {
+        step(function() { return gen.next(v); });      
+      }, function(e) {
+        step(function() { return gen.throw(e); });
+      });
+    }
+    step(function() { return gen.next(undefined); });
+  });
+}
+
+```
+
+
+
+
+
+### 模块化
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：为什么要使用模块化？都有哪几种方式可以实现模块化，各有什么特点？</blockquote>
+
+模块化解决了命名冲突问题，可以提高代码的复用率，提高代码的可维护性。
+
+模块化的好处:
+
+- **避免命名冲突(减少命名空间污染)**
+- **更好的分离, 按需加载**
+- **更高复用性**
+- **高可维护性**
+
+
+
+#### 方式一：函数
+
+最起初，实现模块化的方式使用函数进行封装。将不同功能的代码实现封装到不同的函数中。通常一个文件就是一个模块，有自己的作用域，只向外暴露特定的变量和函数。 
+
+```javascript
+function a(){
+  // 功能二
+}
+function b(){
+  // 功能一
+}
+```
+
+**缺陷：**容易发生命名冲突或者数据的不安全性。
+
+
+
+#### 方式二：立即执行函数
+
+立即执行函数中的匿名函数中有独立的 词法作用域，避免了外界访问此作用域的变量。**通过函数作用域解决了命名冲突、污染全局作用域的问题** 。
+
+```javascript
+// module.js文件
+(function(window) {
+  let name = 'xiaolu'
+  // 暴露的接口来访问数据
+  function a() {
+    console.log(`name:${name}`)
+  }
+  //暴露接口
+  window.myModule = { a } 
+})(window)
+```
+
+```html
+<script type="text/javascript" src="module.js"></script>
+<script type="text/javascript">
+    myModule.name = 'xixi' // 无法访问
+    myModule.foo()  // name:xiaolu
+</script>
+```
+
+
+
+#### 方式三：CommonJS
+
+- `CommonJS` 的规范主要用在 `Node.js` 中，为模块提供了四个接口：`module、exports、require、global`。
+- `CommonJS` 用同步的方式加载模块（服务器端），在浏览器端使用的是异步加载模块。
+
+```javascript
+// lib.js
+var counter = 3;
+function incCounter() {
+    counter++;
+}
+// 对外暴露接口
+module.exports = {
+    counter: counter,
+    incCounter: incCounter,
+};
+```
+
+```javascript
+// 加载外部模块
+var mod = require('./lib');
+
+console.log(mod.counter);  // 3
+mod.incCounter();
+// 原始类型的值被缓存，所以就没有被改变（commonJS 不会随着执行而去模块随时调用）
+console.log(mod.counter); // 3
+```
+
+**加载机制：**
+
+`CommonJS` 模块的加载机制是，输入的是被输出的值的拷贝。也就是说，一旦输出一个值，模块内部的变化就影响不到这个值。
+
+
+
+**特点：**
+
+- 所有代码都运行在模块作用域，不会污染全局作用域。
+- 模块可以多次加载，但是只会在第一次加载时运行一次，然后运行结果就被缓存了，以后再加载，就直接读取缓存结果。要想让模块再次运行，必须清除缓存。
+- 模块加载的顺序，按照其在代码中出现的顺序。
+
+
+
+#### 方式四：AMD 和 CMD
+
+有关 AMD 和 CMD  就不多说了，详细请看这篇文章。
+
+[AMD 和 CMD 的区别有哪些？](https://www.zhihu.com/question/20351507/answer/14859415)
+
+
+
+ <blockquote style="position: relative;border-left-color: #f75151;margin-left: 8px;padding:15px 23px;background:#f8f8f8;color:#666;">
+    <p>面试官：说说 ES6 中的模块化？CommonJS 和 ES6 模块化的区别？</blockquote>
+
+#### 方式五：ES6 Moudle
+
+ES6 实现的模块非常简单，用于浏览器和服务器端。`mport`命令会被 JavaScript 引擎静态分析，在编译时就引入模块代码 .主要有两个命令组成：`export`和`import`:
+
+- `export`命令用于规定模块的**对外接口**。
+- `import`命令引入其他模块的功能。 
+
+```javascript
+// 指定指定的值暴露对外的接口
+export let counter = 3;
+export function incCounter() {
+  counter++;
+}
+
+// 加载模块中的某个值
+import { counter, incCounter } from './lib';
+console.log(counter); // 3
+incCounter();
+// ES6 模块不同的是，静态加载完毕之后，每执行到模块中的方法，就去模块内调用（外部的变量总是与模块进行绑定的），而且值不会被缓存。
+console.log(counter); // 4
+```
+
+
+
+**ES6 模块与 CommonJS 模块的区别：**
+
+- **CommonJS 模块输出的是一个值的拷贝，ES6 模块输出的是值的引用。**
+  - 所谓值的拷贝，原始类型的值被缓存，不随模块内部的改变而改变。
+  - ES6 模块是**动态引用**，**不缓存值**，模块内外是**绑定**的，而且是**只读引用**，不能修改值。ES6 的 js 引擎对脚本静态分析的时候，遇到加载命令模块 `import` ，就会生成一个只读引用，当真正用到模块里边的值的时候，就会去模块内部去取。
+- **CommonJS 模块是运行时加载，ES6 模块是编译时加载输出接口。**
+  - **运行时加载**：`CommonJS` 模块就是对象；是先加载整个模块，生成一个对象，然后再从这个对象上面读取方法，这种加载称为“运行时加载”。 
+  - **编译时加载：**ES6 模块不是对象，而是通过 `export` 命令「显式指定输出的代码」。`import` 时采用静态命令的形式，即在`import `指定「加载某个输出值」，而「不是加载整个模块」，这种加载称为“编译时加载”。 
+
+
+
+#### 小结
+
+- `CommonJS` 规范主要用于服务端编程，加载模块是同步的，这并不适合在浏览器环境，因为同步意味着阻塞加载，浏览器资源是异步加载的，因此有了`AMD CMD`解决方案。
+- `AMD` 规范在浏览器环境中异步加载模块，而且可以并行加载多个模块。不过，`AMD` 规范开发成本高，代码的阅读和书写比较困难，模块定义方式的语义不顺畅。
+- `CMD` 规范与 `AMD`  规范很相似，都用于浏览器编程，依赖就近，延迟执行，可以很容易在 `Node.js` 中运行。不过，依赖 `SPM` 打包，模块的加载逻辑偏重。
+- **ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案**。
+
