@@ -1,4 +1,4 @@
-# 🔥《大前端吊打面试官系列》
+# 🔥《前端面试小册》
 
 ![](https://github.com/luxiangqiang/Web-interview/blob/master/images/logo.png)
 
